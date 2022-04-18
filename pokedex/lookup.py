@@ -491,7 +491,11 @@ class PokedexLookup(object):
             table_facet,
             "name",
         ])
-        searcher = self.index.searcher()
+        try:
+            searcher = self.index.searcher()
+        except Exception as e:
+            print("\n", e)
+            exit(0)
         results = searcher.search(
             query,
             limit=int(max_results * self.INTERMEDIATE_FACTOR),
