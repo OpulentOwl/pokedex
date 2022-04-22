@@ -160,3 +160,13 @@ def test_prefix_lookup(lookup):
     results = lookup.prefix_lookup(prefix=prefix)
     object_name = results[0].object.name
     assert prefix in str(object_name).lower()
+
+    prefix = 'smart'
+    results = lookup.prefix_lookup(prefix=prefix)
+    object_name = results[0].object.name
+    assert prefix in str(object_name).lower()
+
+    prefix = 'power'
+    results = lookup.prefix_lookup(prefix=prefix)
+    object_name = results[0].object.name
+    assert prefix in str(object_name).lower()
