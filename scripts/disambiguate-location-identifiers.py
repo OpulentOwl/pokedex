@@ -34,7 +34,11 @@ def main(*argv):
     pointer = 0
     test = []
     list_locations = []
-    for identifier, locations in sorted(location_dict.items()):
+    print(location_dict.items())
+    #chage sorted key = funtion return a nomatice value
+    print(sorted(location_dict.items()))
+
+    for identifier, locations in sorted(location_dict.items(),key=lambda y: y.lower()):
         disambiguate = any((
                 len(locations) > 1,
                 ambiguous_re.match(identifier),
@@ -64,13 +68,13 @@ def main(*argv):
                 if len(region_locations) == 1:
                    location = region_locations[0]
                     # The region was enough
-                   print(location)
+                  # print(location)
                    location.identifier = new_identifier
                 else:
                     # Need to number the locations :(
                     for i, location in enumerate(region_locations, start=1):
                         numbered_identifier = '%s-%s' % (new_identifier, i)
-                        print(numbered_identifier)
+                       # print(numbered_identifier)
                        # location.identifier = numbered_identifier
                         print(locations)
             #print(location)
@@ -89,10 +93,8 @@ def main(*argv):
             print('Run with --commit to commit changes')
     else:
         print('No changes needed')
-    print(test)
+    #print(test)
     #print(location_split, pointer)
-    print(list_locations)
-    for places in list_locations:
 
 
 

@@ -560,6 +560,8 @@ class PokedexLookup(object):
         # simple search for "random" will do some eight queries, counting the
         # rows in every single indexed table, and that's awful.
         # XXX Can we improve on this, reasonably?
+        for table in table_names:
+            whoosh.query.
         table_name = random.choice(table_names)
         count = self.session.query(self.indexed_tables[table_name]).count()
         id, = self.session.query(self.indexed_tables[table_name].id) \
