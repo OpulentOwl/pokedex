@@ -1,6 +1,5 @@
 # Encoding: UTF-8
 import os
-import pathlib
 
 import pytest
 
@@ -161,7 +160,8 @@ def test_crash_empty_prefix(lookup):
 def test_lookup_index(lookup):
 
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    if pathlib.Path('%s/data/whoosh-index' % root).is_dir():
+    index = os.path.abspath('%s/data/whoosh-index' % root)
+    if os.path.exists(index):
         # Index exists
         results = lookup.lookup(u':Eevee')
         assert results[0].object.name == u'Eevee'
