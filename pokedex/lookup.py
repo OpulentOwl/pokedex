@@ -458,7 +458,8 @@ class PokedexLookup(object):
             # Oh well
             name_as_number = None
 
-        if '*' in name or '?' in name:
+        # if '*' in name or '?' in name:
+        if '*' in name: # Gibeom individual issue #35 fucntion changed
             exact_only = True
             query = whoosh.query.Wildcard(u'name', name)
         elif name_as_number is not None:
