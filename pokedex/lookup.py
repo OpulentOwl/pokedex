@@ -550,11 +550,16 @@ class PokedexLookup(object):
                 table_names.append(table_name)
 
         if not table_names:
-            # n.b.: It's possible we got a list of valid_types and none of them
-            # were valid, but this function is guaranteed to return
-            # *something*, so it politely selects from the entire index instead
-            table_names = list(self.indexed_tables)
-            table_names.remove('pokemon_forms')
+            reader = self.index.reader()
+
+            # How many items are in the index
+            num_items = reader.doc_count()
+
+            random_object = random.randint(0, num_items)
+            selected_object = reader.stored_fields(random_object)
+
+            name = selected_object['display_name']
+            return self.lookup(input=name)
 
         # Pick a random table, then pick a random item from it.  Small tables
         # like Type will have an unnatural bias.  The alternative is that a
@@ -568,6 +573,7 @@ class PokedexLookup(object):
             .first()
 
         return self.lookup(text_type(id), valid_types=[table_name])
+
 
     def prefix_lookup(self, prefix, valid_types=[]):
         """Returns terms starting with the given exact prefix.
