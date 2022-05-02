@@ -558,7 +558,8 @@ class PokedexLookup(object):
             selected_object = reader.stored_fields(random_object)
 
             name = selected_object['display_name']
-            return self.lookup(input=name)
+            table = selected_object['table']
+            return self.lookup(input=name, valid_types=[table])
 
         # Pick a random table, then pick a random item from it.  Small tables
         # like Type will have an unnatural bias.  The alternative is that a
