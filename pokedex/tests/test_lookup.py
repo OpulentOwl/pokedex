@@ -182,7 +182,10 @@ def test_prefix_lookup(lookup):
     object_name = results[0].object.name
     assert prefix in str(object_name).lower()
 
-    prefix = 'power'
+
+def test_bad_prefix_lookup(lookup):
+    prefix = 'yyy'
     results = lookup.prefix_lookup(prefix=prefix)
-    object_name = results[0].object.name
-    assert prefix in str(object_name).lower()
+    with pytest.raises(IndexError):
+        object_name = results[0].object.name
+
