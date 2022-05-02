@@ -1,6 +1,9 @@
 # Encoding: UTF-8
+import os
+import pathlib
 
 import pytest
+
 parametrize = pytest.mark.parametrize
 
 @parametrize(
@@ -153,6 +156,19 @@ def test_crash_empty_prefix(lookup):
     """Searching for ':foo' used to crash, augh!"""
     results = lookup.lookup(u':Eevee')
     assert results[0].object.name == u'Eevee'
+
+
+def test_lookup_index(lookup):
+
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if pathlib.Path(f'{root}/data/whoosh-index').is_dir():
+        # Index exists
+        results = lookup.lookup(u':Eevee')
+        assert results[0].object.name == u'Eevee'
+    else:
+        # Index does not exist
+        with pytest.raises(SystemExit):
+            results = lookup.lookup(u':Eevee')
 
 
 def test_prefix_lookup(lookup):
