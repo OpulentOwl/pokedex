@@ -161,7 +161,7 @@ def test_crash_empty_prefix(lookup):
 def test_lookup_index(lookup):
 
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    if pathlib.Path(f'{root}/data/whoosh-index').is_dir():
+    if pathlib.Path('%s/data/whoosh-index' % root).is_dir():
         # Index exists
         results = lookup.lookup(u':Eevee')
         assert results[0].object.name == u'Eevee'
