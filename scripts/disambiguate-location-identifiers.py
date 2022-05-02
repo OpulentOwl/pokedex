@@ -31,16 +31,18 @@ def main(*argv):
         location_dict[location.identifier].append(location)
 
     changes = False
+    pointer = 0
     for identifier, locations in sorted(location_dict.items()):
         disambiguate = any((
                 len(locations) > 1,
                 ambiguous_re.match(identifier),
                 identifier in ambiguous_set,
             ))
-        print len(locations), ' *'[disambiguate], identifier,
+        location_split = identifier.split('-')
+        print(location_split,pointer)
         if disambiguate:
             changes = True
-            print u'→'.encode('utf-8'),
+            #print u'→'.encode('utf-8'),
             by_region = defaultdict(list)
             for location in locations:
                 if location.region:
@@ -54,26 +56,27 @@ def main(*argv):
                     # No change
                     new_identifier = identifier
                 if len(region_locations) == 1:
-                    location = region_locations[0]
+                   location = region_locations[0]
                     # The region was enough
-                    print new_identifier,
-                    location.identifier = new_identifier
+                   #print(new_identifier)
+                   location.identifier = new_identifier
                 else:
                     # Need to number the locations :(
                     for i, location in enumerate(region_locations, start=1):
                         numbered_identifier = '%s-%s' % (new_identifier, i)
-                        print numbered_identifier,
+                       # print numbered_identifier,
                         location.identifier = numbered_identifier
-        print
+            #print(location)
+        pointer += 1
 
     if changes:
         if argv and argv[0] == '--commit':
             session.commit()
-            print 'Committed'
+            print('Committed')
         else:
-            print 'Run with --commit to commit changes'
+            print('Run with --commit to commit changes')
     else:
-        print 'No changes needed'
+        print('No changes needed')
 
 
 if __name__ == '__main__':

@@ -1,6 +1,8 @@
 # Encoding: UTF-8
+import os
 
 import pytest
+
 parametrize = pytest.mark.parametrize
 
 @parametrize(
@@ -133,7 +135,6 @@ def test_bare_random(lookup):
         results = lookup.lookup(u'random')
         assert len(results) == 1
 
-
 @parametrize(
     'table_name',
     [
@@ -154,3 +155,37 @@ def test_crash_empty_prefix(lookup):
     """Searching for ':foo' used to crash, augh!"""
     results = lookup.lookup(u':Eevee')
     assert results[0].object.name == u'Eevee'
+
+
+def test_lookup_index(lookup):
+
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    index = os.path.abspath('%s/data/whoosh-index' % root)
+    if os.path.exists(index):
+        # Index exists
+        results = lookup.lookup(u':Eevee')
+        assert results[0].object.name == u'Eevee'
+    else:
+        # Index does not exist
+        with pytest.raises(SystemExit):
+            results = lookup.lookup(u':Eevee')
+
+
+def test_prefix_lookup(lookup):
+    prefix = 'char'
+    results = lookup.prefix_lookup(prefix=prefix)
+    object_name = results[0].object.name
+    assert prefix in str(object_name).lower()
+
+    prefix = 'smart'
+    results = lookup.prefix_lookup(prefix=prefix)
+    object_name = results[0].object.name
+    assert prefix in str(object_name).lower()
+
+
+def test_bad_prefix_lookup(lookup):
+    prefix = 'yyy'
+    results = lookup.prefix_lookup(prefix=prefix)
+    with pytest.raises(IndexError):
+        object_name = results[0].object.name
+
