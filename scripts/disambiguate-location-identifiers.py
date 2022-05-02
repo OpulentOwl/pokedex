@@ -32,6 +32,7 @@ def main(*argv):
 
     changes = False
     pointer = 0
+    test = []
     for identifier, locations in sorted(location_dict.items()):
         disambiguate = any((
                 len(locations) > 1,
@@ -39,12 +40,13 @@ def main(*argv):
                 identifier in ambiguous_set,
             ))
         location_split = identifier.split('-')
-        print(location_split,pointer)
+        #print(location_split,pointer)
         if disambiguate:
             changes = True
             #print u'→'.encode('utf-8'),
             by_region = defaultdict(list)
             for location in locations:
+                print(location)
                 if location.region:
                     by_region[location.region.identifier].append(location)
                 else:
@@ -55,6 +57,7 @@ def main(*argv):
                 else:
                     # No change
                     new_identifier = identifier
+                    print(new_identifier)
                 if len(region_locations) == 1:
                    location = region_locations[0]
                     # The region was enough
@@ -68,6 +71,10 @@ def main(*argv):
                         location.identifier = numbered_identifier
             #print(location)
         pointer += 1
+        for place in location_split:
+            if place ==  'route':
+                test.append(place)
+
 
     if changes:
         if argv and argv[0] == '--commit':
@@ -77,6 +84,8 @@ def main(*argv):
             print('Run with --commit to commit changes')
     else:
         print('No changes needed')
+   # print(test)
+    print(location_dict, pointer)
 
 
 if __name__ == '__main__':
