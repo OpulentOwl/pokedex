@@ -539,34 +539,45 @@ class PokedexLookup(object):
         `valid_types`.
         """
 
-        table_names = []
-        for valid_type in valid_types:
-            table_name = self._parse_table_name(valid_type)
-            # Skip anything not recognized.  Could be, say, a language code.
-            # XXX The vast majority of Pokémon forms are unnamed and unindexed,
-            #     which can produce blank results.  So skip them too for now.
-            if table_name and table_name != 'pokemon_forms':
-                table_names.append(table_name)
+        # table_names = []
+        # for valid_type in valid_types:
+        #     table_name = self._parse_table_name(valid_type)
+        #     # Skip anything not recognized.  Could be, say, a language code.
+        #     # XXX The vast majority of Pokémon forms are unnamed and unindexed,
+        #     #     which can produce blank results.  So skip them too for now.
+        #     if table_name and table_name != 'pokemon_forms':
+        #         table_names.append(table_name)
+        #
+        # if not table_names:
+        #     # n.b.: It's possible we got a list of valid_types and none of them
+        #     # were valid, but this function is guaranteed to return
+        #     # *something*, so it politely selects from the entire index instead
+        #     table_names = list(self.indexed_tables)
+        #     table_names.remove('pokemon_forms')
+        #
+        # # Pick a random table, then pick a random item from it.  Small tables
+        # # like Type will have an unnatural bias.  The alternative is that a
+        # # simple search for "random" will do some eight queries, counting the
+        # # rows in every single indexed table, and that's awful.
+        # # XXX Can we improve on this, reasonably?
+        # table_name = random.choice(table_names)
+        # count = self.session.query(self.indexed_tables[table_name]).count()
+        # id, = self.session.query(self.indexed_tables[table_name].id) \
+        #     .offset(random.randint(0, count - 1)) \
+        #     .first()
+        #
+        # return self.lookup(text_type(id), valid_types=[table_name])
 
-        if not table_names:
-            # n.b.: It's possible we got a list of valid_types and none of them
-            # were valid, but this function is guaranteed to return
-            # *something*, so it politely selects from the entire index instead
-            table_names = list(self.indexed_tables)
-            table_names.remove('pokemon_forms')
+        reader = self.index.reader()
 
-        # Pick a random table, then pick a random item from it.  Small tables
-        # like Type will have an unnatural bias.  The alternative is that a
-        # simple search for "random" will do some eight queries, counting the
-        # rows in every single indexed table, and that's awful.
-        # XXX Can we improve on this, reasonably?
-        table_name = random.choice(table_names)
-        count = self.session.query(self.indexed_tables[table_name]).count()
-        id, = self.session.query(self.indexed_tables[table_name].id) \
-            .offset(random.randint(0, count - 1)) \
-            .first()
+        # How many items are in the index
+        num_items = reader.doc_count()
 
-        return self.lookup(text_type(id), valid_types=[table_name])
+        random_object = random.randint(0, num_items)
+        selected_object = reader.stored_fields(random_object)
+
+        name = selected_object['display_name']
+        return self.lookup(input=name)
 
     def prefix_lookup(self, prefix, valid_types=[]):
         """Returns terms starting with the given exact prefix.
