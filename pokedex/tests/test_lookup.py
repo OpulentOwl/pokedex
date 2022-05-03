@@ -198,13 +198,13 @@ def test_Funny_characters(lookup):
 
 def test_other_language(lookup):
     results = lookup.lookup(u'フシギダネ')
-    assert len(results) == 1
+    assert results[0].object.name == u'Bulbasaur'
 
     results = lookup.lookup(u'수댕이')
-    assert len(results) == 1
+    assert results[0].object.name == u'Oshawott'
 
     results = lookup.lookup(u'噴嚏熊')
-    assert len(results) == 1
+    assert results[0].object.name == u'Cubchoo'
 
     results = lookup.lookup(u'Dodoala')
-    assert len(results) == 1
+    assert results[0].object.name == u'Komala'
