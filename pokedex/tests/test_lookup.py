@@ -189,3 +189,22 @@ def test_bad_prefix_lookup(lookup):
     with pytest.raises(IndexError):
         object_name = results[0].object.name
 
+def test_Funny_characters(lookup):
+    results = lookup.lookup(u'Poké Ball')
+    assert len(results) == 1
+
+    results = lookup.lookup(u'Mt. Moon')
+    assert len(results) == 1
+
+def test_other_language(lookup):
+    results = lookup.lookup(u'フシギダネ')
+    assert len(results) == 1
+
+    results = lookup.lookup(u'수댕이')
+    assert len(results) == 1
+
+    results = lookup.lookup(u'噴嚏熊')
+    assert len(results) == 1
+
+    results = lookup.lookup(u'Dodoala')
+    assert len(results) == 1
