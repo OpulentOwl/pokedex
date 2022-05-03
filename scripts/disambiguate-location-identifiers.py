@@ -11,7 +11,7 @@ generations again.
 Does this by prepending the region name, and if that isn't enough, appends
 numbers.
 """
-
+from natsort import natsorted
 import sys
 import re
 from collections import defaultdict
@@ -34,11 +34,8 @@ def main(*argv):
     pointer = 0
     test = []
     list_locations = []
-    print(location_dict.items())
-    #chage sorted key = funtion return a nomatice value
-    print(sorted(location_dict.items()))
 
-    for identifier, locations in sorted(location_dict.items(),key=lambda y: y.lower()):
+    for identifier, locations in natsorted(location_dict.items()):
         disambiguate = any((
                 len(locations) > 1,
                 ambiguous_re.match(identifier),
