@@ -161,6 +161,21 @@ def test_moves_lookup(lookup):
     assert len(results) == 1
 
 
+def test_types_lookup(lookup):
+    results = lookup.lookup(u'fire')
+    assert len(results) == 2
+
+    results = lookup.lookup(u'water')
+    assert len(results) == 1
+
+    results = lookup.lookup(u'ghost')
+    assert len(results) == 2
+
+    results = lookup.lookup(u'ice')
+    assert len(results) == 1
+
+    results = lookup.lookup(u'poison')
+    assert len(results) == 1
 
 
 def test_crash_empty_prefix(lookup):
@@ -200,6 +215,13 @@ def test_bad_prefix_lookup(lookup):
     with pytest.raises(IndexError):
         object_name = results[0].object.name
 
+def test_symbol_name_lookup(lookup):
+    results = lookup.lookup(u'???')
+    assert results[0].object.name == u'???'
+
+def test_pikachu_lookup(lookup):
+    results = lookup.lookup(u'Pikachu')
+    assert results[0].object.name == u'Pikachu'
 
 def test_funny_characters(lookup):
     results = lookup.lookup(u'Poké Ball')
