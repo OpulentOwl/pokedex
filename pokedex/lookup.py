@@ -597,3 +597,8 @@ class PokedexLookup(object):
         results = searcher.search(query, sortedby=facet)  # XXX , limit=self.MAX_LOOKUP_RESULTS)
 
         return self._whoosh_records_to_results(results)
+
+
+
+
+

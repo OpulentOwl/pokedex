@@ -843,3 +843,4 @@ id,identifier,generation_id,type_id,power,pp,accuracy,priority,target_id,damage_
 10016,shadow-panic,3,10002,,,90,0,6,1,50,,,,
 10017,shadow-shed,3,10002,,,,0,12,1,10005,,,,
 10018,shadow-sky,3,10002,,,,0,12,1,10006,,,,
+10020,g-max wildfire,8,10003,,,,,,,,,,,

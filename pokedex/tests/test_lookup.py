@@ -5,33 +5,34 @@ import pytest
 
 parametrize = pytest.mark.parametrize
 
+
 @parametrize(
     ('input', 'table', 'id'),
     [
         # Simple lookups
-        (u'Eevee',          'pokemon_species',133),
-        (u'Scratch',        'moves',        10),
-        (u'Master Ball',    'items',        1),
-        (u'normal',         'types',        1),
-        (u'Run Away',       'abilities',    50),
+        (u'Eevee', 'pokemon_species', 133),
+        (u'Scratch', 'moves', 10),
+        (u'Master Ball', 'items', 1),
+        (u'normal', 'types', 1),
+        (u'Run Away', 'abilities', 50),
 
         # Funny characters
-        (u'Mr. Mime',       'pokemon_species', 122),
-        (u"Farfetch’d",     'pokemon_species', 83),
-        (u'Poké Ball',      'items',           4),
+        (u'Mr. Mime', 'pokemon_species', 122),
+        (u"Farfetch’d", 'pokemon_species', 83),
+        (u'Poké Ball', 'items', 4),
 
         # Forms
-        (u'Rotom',          'pokemon_species', 479),
-        (u'Wash Rotom',     'pokemon_forms',   10059),
-        (u'East Shellos',   'pokemon_forms',   10039),
+        (u'Rotom', 'pokemon_species', 479),
+        (u'Wash Rotom', 'pokemon_forms', 10059),
+        (u'East Shellos', 'pokemon_forms', 10039),
 
         # Other languages
-        (u'イーブイ',       'pokemon_species', 133),
-        (u'Iibui',          'pokemon_species', 133),
-        (u'Eievui',         'pokemon_species', 133),
-        (u'이브이',         'pokemon_species', 133),
-        (u'伊布',           'pokemon_species', 133),
-        (u'Evoli',          'pokemon_species', 133),
+        (u'イーブイ', 'pokemon_species', 133),
+        (u'Iibui', 'pokemon_species', 133),
+        (u'Eievui', 'pokemon_species', 133),
+        (u'이브이', 'pokemon_species', 133),
+        (u'伊布', 'pokemon_species', 133),
+        (u'Evoli', 'pokemon_species', 133),
     ]
 )
 def test_exact_lookup(lookup, input, table, id):
@@ -91,16 +92,16 @@ def test_language_lookup(lookup):
     ('misspelling', 'name'),
     [
         # Regular English names
-        (u'chamander',          u'Charmander'),
-        (u'pokeball',           u'Poké Ball'),
+        (u'chamander', u'Charmander'),
+        (u'pokeball', u'Poké Ball'),
 
         # Names with squiggles in them
-        (u'farfetchd',          u"Farfetch’d"),
-        (u'porygonz',           u'Porygon-Z'),
+        (u'farfetchd', u"Farfetch’d"),
+        (u'porygonz', u'Porygon-Z'),
 
         # Sufficiently long foreign names
-        (u'カクレオ',           u'Kecleon'),
-        (u'Yamikrasu',          u'Murkrow'),
+        (u'カクレオ', u'Kecleon'),
+        (u'Yamikrasu', u'Murkrow'),
     ]
 )
 def test_fuzzy_lookup(lookup, misspelling, name):
@@ -119,9 +120,9 @@ def test_nidoran(lookup):
 @parametrize(
     ('wildcard', 'name'),
     [
-        (u'pokemon:*meleon',    u'Charmeleon'),
-        (u'item:master*',       u'Master Ball'),
-        (u'ee?ee',              u'Eevee'),
+        (u'pokemon:*meleon', u'Charmeleon'),
+        (u'item:master*', u'Master Ball'),
+        (u'ee?ee', u'Eevee'),
     ]
 )
 def test_wildcard_lookup(lookup, wildcard, name):
@@ -134,6 +135,7 @@ def test_bare_random(lookup):
     for i in range(5):
         results = lookup.lookup(u'random')
         assert len(results) == 1
+
 
 @parametrize(
     'table_name',
@@ -151,6 +153,16 @@ def test_qualified_random(lookup, table_name):
     assert results[0].object.__tablename__ == table_name
 
 
+def test_moves_lookup(lookup):
+    results = lookup.lookup(u'wrap')
+    assert len(results) == 1
+
+    results = lookup.lookup(u'megakick')
+    assert len(results) == 1
+
+
+
+
 def test_crash_empty_prefix(lookup):
     """Searching for ':foo' used to crash, augh!"""
     results = lookup.lookup(u':Eevee')
@@ -158,7 +170,6 @@ def test_crash_empty_prefix(lookup):
 
 
 def test_lookup_index(lookup):
-
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     index = os.path.abspath('%s/data/whoosh-index' % root)
     if os.path.exists(index):
@@ -189,12 +200,14 @@ def test_bad_prefix_lookup(lookup):
     with pytest.raises(IndexError):
         object_name = results[0].object.name
 
+
 def test_funny_characters(lookup):
     results = lookup.lookup(u'Poké Ball')
     assert len(results) == 1
 
     results = lookup.lookup(u'Mt. Moon')
     assert len(results) == 1
+
 
 def test_other_language(lookup):
     results = lookup.lookup(u'フシギダネ')
