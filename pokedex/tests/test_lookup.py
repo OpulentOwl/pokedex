@@ -161,8 +161,6 @@ def test_moves_lookup(lookup):
     assert len(results) == 1
 
 
-
-
 def test_crash_empty_prefix(lookup):
     """Searching for ':foo' used to crash, augh!"""
     results = lookup.lookup(u':Eevee')
