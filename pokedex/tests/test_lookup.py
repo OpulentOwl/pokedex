@@ -161,6 +161,23 @@ def test_moves_lookup(lookup):
     assert len(results) == 1
 
 
+def test_types_lookup(lookup):
+    results = lookup.lookup(u'fire')
+    assert len(results) == 2
+
+    results = lookup.lookup(u'water')
+    assert len(results) == 1
+
+    results = lookup.lookup(u'ghost')
+    assert len(results) == 2
+
+    results = lookup.lookup(u'ice')
+    assert len(results) == 1
+
+    results = lookup.lookup(u'poison')
+    assert len(results) == 1
+
+
 def test_crash_empty_prefix(lookup):
     """Searching for ':foo' used to crash, augh!"""
     results = lookup.lookup(u':Eevee')
