@@ -215,6 +215,13 @@ def test_bad_prefix_lookup(lookup):
     with pytest.raises(IndexError):
         object_name = results[0].object.name
 
+def test_symbol_name_lookup(lookup):
+    results = lookup.lookup(u'???')
+    assert results[0].object.name == u'???'
+
+def test_pikachu_lookup(lookup):
+    results = lookup.lookup(u'Pikachu')
+    assert results[0].object.name == u'Pikachu'
 
 def test_funny_characters(lookup):
     results = lookup.lookup(u'Poké Ball')
